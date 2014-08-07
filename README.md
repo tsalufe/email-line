@@ -1,3 +1,6 @@
+
+require Zend Framework 2
+
 =========================
 setup database
 
