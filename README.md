@@ -39,7 +39,12 @@ edit /etc/postfix/main.cf, add:
 
 virtual_alias_maps = proxy:mysql:/etc/postfix/mysql-virtual-mailbox-users.cf
 
-virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+edit /etc/postfix/master.cf
+myfilter unix - n n - - pipe
+  flags=F user=www-data argv=/home/ubuntu/bin/email-line/postfix.php ${sender} ${size} ${recipient}
+mtp      inet  n       -       -       -       -       smtpd
+         -o content_filter=myfilter:dummy
+
 
 in /etc/postfix/mysql-virtual-mailbox-users.cf
 
@@ -48,13 +53,3 @@ password = your-db-password
 hosts = 127.0.0.1
 dbname = emailline
 query = SELECT Email as email FROM users WHERE Email='%s'
-~
-
-in /etc/postfix/mysql-virtual-mailbox-maps.cf
-
-user = your-db-username
-password = your-db-password
-hosts = 127.0.0.1
-dbname = emailline
-query = SELECT 1 FROM users WHERE Email='%s'
-
