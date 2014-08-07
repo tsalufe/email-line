@@ -1,0 +1,5 @@
+user = your-db-username 
+password = your-db-password
+hosts = 127.0.0.1
+dbname = emailline
+query = SELECT Email as email FROM users WHERE Email='%s'
