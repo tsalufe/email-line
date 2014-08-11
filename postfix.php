@@ -20,7 +20,7 @@ $test=fopen('/tmp/postfixtest','a');
 $from=$zf_msg->getFrom()->current()->getEmail();
 $to=$zf_msg->getTo()->current()->getEmail();
 $subject=$zf_msg->getSubject();
-$body=$zf_msg->getBody();
+$body=rmTags($zf_msg->getBody());
 $lines=explode("\n",$body);
 $num_lines=count($lines);
 $i=0;
@@ -68,9 +68,14 @@ function showManual($to,$subj){
 	$body.="Command=\n".
 		"Parameter=\n".
 		"\n".
-		"Please fill in your values above after = to begin\n";
+		"Please fill in your values above after = to begin\n".
+		"(Note that command must begin with a capital letter at the beginning of each line.)";
 	$zf_msg->setBody($body);
 	mail($to,$subj,$body,"From:robot@gehwah.com\r\n");
+}
+
+function rmTags($str){
+	return preg_replace('/<[^<>]*>/','',$str);
 }
 
 ?>
